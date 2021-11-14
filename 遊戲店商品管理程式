@@ -1,0 +1,124 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov  6 10:54:40 2021
+
+@author: user
+"""
+
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Oct 24 16:11:56 2021
+
+@author: will5
+"""
+import csv,os
+if os.path.exists('gameshop.csv'):
+    with open('gameshop.csv','r',newline='',encoding='utf-8-sig') as f:
+        read=csv.reader(f)
+        read=list(read)
+        read=dict(read[1:])
+        print(read)
+    
+
+    
+
+games={}
+if os.path.exists('gameshop.csv'):
+    for key,value in read.items():
+        games[key]=value
+def menu():
+    print('{:*^20}'.format('遊戲店管理程式'))
+    print('{:^20}'.format('(1).新增品項'))
+    print('{:^20}'.format('(2).刪除品項'))
+    print('{:^20}'.format('(3).修改品項'))
+    print('{:^20}'.format('(4).目前品項'))
+    print('{:^20}'.format('(5).清除品項'))
+    print('{:^20}'.format('(6).儲存後離開'))
+    print('{:*^20}'.format('遊戲店管理程式'))
+def add():
+    while True:
+        gameName=input('請輸入購買的遊戲:(q:exit)')
+        if gameName.lower()=='q':
+            break
+        if gameName in games:
+            print(f'{gameName}該產品已存在')
+            return
+        try:
+            price=int(input('請輸入遊戲價格:'))
+        except ValueError:
+            print(f'{gameName}價格有誤，請重新輸入')
+        else:
+            games[gameName]=price
+            print(f'{gameName}產品已輸入')
+            updata()
+    view()
+    print('執行增新品項結束')
+    
+def delete():
+    gameName=input('請輸入刪除遊戲的名稱:')
+    if gameName in games:
+        del games[gameName]
+        print(f'{gameName}該產品已刪除')
+        return
+    print(f'{gameName}該產品不存在')
+def updata():
+    while True:
+        gameName=input('請輸入修正遊戲的名稱:(若無請按q or Q)')
+        if gameName.lower()=='q':
+            break
+        if gameName in games:
+            price=int(input('請輸入修正的金額:'))
+            print(f'{gameName}價格已由{games[gameName]}修正為{price}')
+            games[gameName]=price            
+            return
+    
+        print('該產品不存在')
+def view():
+    if len(games)==0:
+        print('目前沒輸入產品，請輸入後再執行')
+        add()
+        return
+    
+    for key,value in games.items():
+        print('目前產品有')
+        print('{}==>{}元'.format(key,value))
+    print(f'以上共計{len(games)}項產品')
+
+def clear():
+    choice=input('是否確定刪除所有品項?(y/n)')
+    if choice == 'y':
+        games.clear()
+        print('已清除管理品項')
+        return
+    print('重返介面操作')
+def store():
+    with open('gameshop.csv','w',newline='',encoding='utf-8-sig') as f:
+        writer=csv.writer(f)
+        writer.writerow(['商品名稱','金額'])
+        writer.writerows(games.items())
+    return '儲存成功!!!!!!!!!!!'
+
+
+
+while True:
+    menu()
+        
+    choice=int(input('請輸入選項==>'))
+    if choice == 6:
+        # store=input('請問是否儲存?')
+        store()
+        print('儲存成功!')
+        
+        break
+
+    elif choice == 1:
+        add()
+    elif choice == 2:
+        delete()
+    elif choice == 3:
+        updata()
+    elif choice == 4:
+        view()
+    else:
+        clear()
+    input('按下enter鍵以繼續')
