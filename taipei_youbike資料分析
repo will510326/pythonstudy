@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov  6 15:18:15 2021
+
+@author: user
+"""
+import json,csv
+with open('youbike_immediate.json',encoding='utf-8-sig') as f:
+    datas=json.load(f)
+# print(datas)
+totaltot=0
+totalsbi=0
+bikes=[]
+columns=['sno','sna','mday','ar','sbi','tot','bemp','act']
+for data in datas:
+    bike=[]
+    for c in columns:
+        # print(data[c],end=' ')
+        bike.append(data[c])
+    print()
+    # print(bike)
+    bikes.append(bike)
+    totaltot+=data['tot']
+    totalsbi+=data['sbi']
+
+print(bikes)
+
+
+# print(datas)
+with open('youbike.csv','w',encoding='utf-8-sig',newline='') as f:
+    writer=csv.writer(f)
+    writer.writerow(['sno','sna','mday','ar','sbi','tot','bemp','act'])
+    writer.writerows(bikes)
+    
+with open('youbike.csv','a',encoding='utf-8-sig',newline='') as f:
+    f.write(f'總共有{totaltot}個停車格,租車地共有{totalsbi}個')
